@@ -63,7 +63,7 @@ const Login = () => {
           </div>
           <CardTitle className="text-3xl font-bold">Welcome</CardTitle>
           <CardDescription>
-            Sign in to vCommission Media Portal
+            vCommission Media Portal
           </CardDescription>
         </CardHeader>
 
@@ -98,7 +98,7 @@ const Login = () => {
                 className="w-full h-11 text-base font-medium"
                 disabled={loading}
               >
-                {loading ? 'Signing in...' : 'Sign In'}
+                {loading ? 'Loging in...' : 'Log In'}
               </Button>
             </form>
             
