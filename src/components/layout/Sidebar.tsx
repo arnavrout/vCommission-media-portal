@@ -16,14 +16,18 @@ interface SidebarProps {
 export const Sidebar = ({ isOpen }: SidebarProps) => {
   return (
     <motion.aside
-      initial={{ x: -250 }}
-      animate={{ x: isOpen ? 0 : -250 }}
-      transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-      className={`fixed lg:sticky top-0 left-0 h-screen w-64 bg-card border-r border-border shadow-md z-30`}
-      style={{
-        pointerEvents: isOpen ? 'auto' : 'none',
-      }}
-    >
+        initial={{ x: -250 }}
+        animate={{ x: isOpen ? 0 : -250 }}
+        transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+        className={`
+          bg-card border-r border-border shadow-md z-30 w-64
+          max-[1000px]:fixed max-[1000px]:top-0 max-[1000px]:left-0 max-[1000px]:h-screen
+          min-[1000px]:sticky min-[1000px]:top-0 min-[1000px]:h-auto
+        `}
+        style={{
+          pointerEvents: isOpen ? 'auto' : 'none',
+        }}
+      >
       {/* Header */}
       <div className="p-6 w-full flex flex-col items-start space-y-2">
         <img

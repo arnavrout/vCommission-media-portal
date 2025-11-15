@@ -4,6 +4,9 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { Badge } from '@/components/ui/badge';
+import { Heart } from 'lucide-react';
+import { useFavorites } from '@/contexts/FavoriteContext';
+
 import {
   Sheet,
   SheetContent,
@@ -22,6 +25,8 @@ export const Navbar = ({ onToggleSidebar }: NavbarProps) => {
   const { theme, toggleTheme } = useTheme();
   const { logout } = useAuth();
   const { items, itemCount, total, removeFromCart } = useCart();
+  const { favorites, favoriteCount, removeFavorite } = useFavorites();
+
 
   return (
     <motion.header
@@ -57,7 +62,51 @@ export const Navbar = ({ onToggleSidebar }: NavbarProps) => {
               <Sun className="h-5 w-5" />
             )}
           </Button>
+          {/* For Favorites */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative rounded-lg">
+                <Heart className="h-5 w-5" />
+                {favoriteCount > 0 && (
+                  <Badge
+                    variant="secondary"
+                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                  >
+                    {favoriteCount}
+                  </Badge>
+                )}
+              </Button>
+            </SheetTrigger>
 
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Favorites</SheetTitle>
+                <SheetDescription>
+                  {favoriteCount === 0 ? 'No favorites added' : `${favoriteCount} items`}
+                </SheetDescription>
+              </SheetHeader>
+
+              <div className="mt-6 space-y-4">
+                {favorites.map(f => (
+                  <div key={f.id} className="flex items-center gap-4 border-b pb-4">
+                    <img
+                      src={f.image}
+                      className="h-16 w-16 object-cover rounded-lg"
+                    />
+                    <div className="flex-1">
+                      <h4 className="font-medium">{f.name}</h4>
+                    </div>
+                    <Button variant="ghost" size="sm" onClick={() => removeFavorite(f.id)}>
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </SheetContent>
+          </Sheet>
+
+
+          {/* For Add To Cart */}
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="relative rounded-lg">

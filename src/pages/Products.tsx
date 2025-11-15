@@ -14,6 +14,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { useNavigate } from "react-router-dom";
 
 interface Product {
   id: number;
@@ -30,8 +31,9 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const { addToCart } = useCart();
   const productsPerPage = 15;
+  const navigate = useNavigate();
 
-  // ✅ Fetch products dynamically on page change
+  // Fetch products on pagination
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -65,22 +67,16 @@ const Products = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
+
+        {/* Heading */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="text-3xl font-bold">Products</h1>
           <p className="text-muted-foreground">Browse our collection of products</p>
         </motion.div>
 
         {/* Search Box */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="relative"
-        >
-        <div className="relative w-full sm:w-1/2 md:w-1/3">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+          <div className="relative w-full sm:w-1/2 md:w-1/3">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
               placeholder="Search products..."
@@ -103,11 +99,7 @@ const Products = () => {
             <p className="mt-3 text-lg font-medium">Loading products...</p>
           </div>
         ) : filteredProducts.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-12"
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
             <p className="text-muted-foreground text-lg">No products found.</p>
           </motion.div>
         ) : (
@@ -127,39 +119,54 @@ const Products = () => {
                   >
                     <Card className="overflow-hidden h-full flex flex-col">
                       <div className="aspect-video overflow-hidden bg-muted">
-                        {/* ✅ Show only one image (thumbnail) */}
                         <img
                           src={product.thumbnail}
                           alt={product.title}
                           className="w-full h-full object-cover transition-all duration-300"
                         />
                       </div>
+
                       <CardContent className="p-4 flex-1 flex flex-col">
+
+                        {/* Title */}
                         <h3 className="font-semibold text-lg mb-3 line-clamp-2">{product.title}</h3>
+
+                        {/* Pricing */}
                         <div className="mb-4">
                           <div className="flex items-center gap-2 mb-1">
                             <p className="text-2xl font-bold text-primary">
-                              ₹{discountedPriceINR.toLocaleString('en-IN')}
+                              ₹{originalPriceINR.toLocaleString('en-IN')}
                             </p>
                             <span className="text-sm font-medium text-green-600 bg-green-50 px-2 py-1 rounded">
-                              {Math.round(product.discountPercentage)}% off
+                              {product.discountPercentage}% off
                             </span>
                           </div>
-                          <p className="text-sm text-muted-foreground line-through">
-                            ₹{originalPriceINR.toLocaleString('en-IN')}
-                          </p>
                         </div>
+
+                        {/* View Details → navigate to /products/:id */}
+                        <Button
+                          variant="outline"
+                          className="w-full mt-3 mb-3"
+                          onClick={() => navigate(`/products/${product.id}`)}
+                        >
+                          View Details
+                        </Button>
+
+                        {/* Add to cart */}
                         <Button
                           className="w-full mt-auto"
-                          onClick={() => addToCart({
-                            id: product.id,
-                            name: product.title,
-                            price: discountedPriceINR,
-                            image: product.thumbnail
-                          })}
+                          onClick={() =>
+                            addToCart({
+                              id: product.id,
+                              name: product.title,
+                              price: discountedPriceINR,
+                              image: product.thumbnail
+                            })
+                          }
                         >
                           Add to Cart
                         </Button>
+
                       </CardContent>
                     </Card>
                   </motion.div>
@@ -168,12 +175,7 @@ const Products = () => {
             </div>
 
             {/* Pagination */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="mt-8 flex justify-center"
-            >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="mt-8 flex justify-center">
               <Pagination>
                 <PaginationContent>
                   <PaginationItem>
@@ -182,7 +184,8 @@ const Products = () => {
                       className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                     />
                   </PaginationItem>
-                  {Array.from({ length: 10 }, (_, i) => i + 1).map((page) => ( // dummyjson has 100 products
+
+                  {Array.from({ length: 10 }, (_, i) => i + 1).map((page) => (
                     <PaginationItem key={page}>
                       <PaginationLink
                         onClick={() => setCurrentPage(page)}
@@ -193,6 +196,7 @@ const Products = () => {
                       </PaginationLink>
                     </PaginationItem>
                   ))}
+
                   <PaginationItem>
                     <PaginationNext
                       onClick={() => setCurrentPage(prev => prev + 1)}
