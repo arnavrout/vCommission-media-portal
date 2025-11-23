@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
+import { Moon, Sun } from 'lucide-react';             
 import PortalLogo from '../assets/vCommission-logo.png'
 
 const Login = () => {
@@ -14,6 +16,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { login, isAuthenticated, isLoading } = useAuth();
+  const { theme, toggleTheme } = useTheme(); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,6 +50,17 @@ const Login = () => {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-brand-light via-background to-brand-cream p-4">
+      
+      {/* ⭐ THEME TOGGLE BUTTON IN TOP RIGHT */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute top-4 right-4 rounded-lg"
+        onClick={toggleTheme}
+      >
+        {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+      </Button>
+
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}

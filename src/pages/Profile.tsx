@@ -88,27 +88,35 @@ const Profile = () => {
             </CardHeader>
 
             {/* ✅ Profile Info Grid (3 per row) */}
-            <CardContent className="pt-6">
-              <div className="grid gap-6 md:grid-cols-3">
-                {profileData.map((item, index) => (
-                  <motion.div
-                    key={item.label}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="flex items-start gap-4 p-4 rounded-lg bg-muted/50"
-                  >
-                    <div className="p-2 rounded-lg bg-primary/10">
-                      <item.icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm text-muted-foreground mb-1">{item.label}</p>
-                      <p className="font-medium">{item.value}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
+<CardContent className="pt-6">
+  <div className="grid gap-6 md:grid-cols-3">
+    {profileData.map((item, index) => (
+      <motion.div
+        key={item.label}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: index * 0.1 }}
+        className="flex items-start gap-4 p-4 rounded-lg bg-muted/50"
+      >
+        {/* Rotating Icon with background */}
+        <motion.div
+          className="p-2 rounded-lg bg-primary/10 flex items-center justify-center"
+          animate={{ rotateY: 360 }}
+          transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
+          whileHover={{ rotateY: 0 }} // stop rotation on hover
+        >
+          <item.icon className="h-5 w-5 text-primary" />
+        </motion.div>
+
+        <div className="flex-1">
+          <p className="text-sm text-muted-foreground mb-1">{item.label}</p>
+          <p className="font-medium">{item.value}</p>
+        </div>
+      </motion.div>
+    ))}
+  </div>
+</CardContent>
+
           </Card>
         </motion.div>
 

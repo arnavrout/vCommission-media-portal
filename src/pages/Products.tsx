@@ -132,16 +132,33 @@ const Products = () => {
                         <h3 className="font-semibold text-lg mb-3 line-clamp-2">{product.title}</h3>
 
                         {/* Pricing */}
-                        <div className="mb-4">
-                          <div className="flex items-center gap-2 mb-1">
-                            <p className="text-2xl font-bold text-primary">
-                              ₹{originalPriceINR.toLocaleString('en-IN')}
-                            </p>
-                            <span className="text-sm font-medium text-green-600 bg-green-50 px-2 py-1 rounded">
-                              {product.discountPercentage}% off
-                            </span>
-                          </div>
-                        </div>
+                    <div className="mb-4">
+                      <div className="flex items-center gap-2 mb-1">
+                        {/* Original Price with rotating background */}
+                        <motion.div
+                          className="px-2 py-1 rounded text-2xl font-bold relative overflow-hidden"
+                          style={{
+                            backgroundColor: "hsl(var(--brand-cream))", // soft yellow from index.css
+                          }}
+                          animate={{ rotateY: 360 }}
+                          transition={{
+                            repeat: Infinity,
+                            duration: 4,
+                            ease: "linear",
+                          }}
+                          whileHover={{ rotateY: 0 }} // stop rotation on hover
+                        >
+                          <span className="relative z-10 text-foreground">
+                            ₹{originalPriceINR.toLocaleString('en-IN')}
+                          </span>
+                        </motion.div>
+
+                        <span className="text-sm font-medium text-green-600 bg-green-50 px-2 py-1 rounded">
+                          {product.discountPercentage}% off
+                        </span>
+                      </div>
+                    </div>
+
 
                         {/* View Details → navigate to /products/:id */}
                         <Button

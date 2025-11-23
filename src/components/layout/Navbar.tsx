@@ -34,7 +34,7 @@ export const Navbar = ({ onToggleSidebar }: NavbarProps) => {
       animate={{ y: 0, opacity: 1 }}
       className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
     >
-      <div className="container flex h-16 items-center justify-between px-6 shadow-[0_2px_6px_rgba(0,0,0,0.1)]">
+      <div className="w-full flex h-16 items-center justify-between px-[25px] shadow-[0_2px_6px_rgba(0,0,0,0.1)]">
         {/* Left section */}
         <div className="flex items-center gap-2">
           <Button

@@ -1,10 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Heart, HeartOff, Tag, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/contexts/FavoriteContext";
 import { useEffect, useState } from "react";
+import { Moon, Sun } from 'lucide-react';             
+
 
 const fadeIn = {
   initial: { opacity: 0, y: 10 },
@@ -18,6 +21,7 @@ const ProductDetails = () => {
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
   const [product, setProduct] = useState<any>(null);
   const [mainImage, setMainImage] = useState<string>("");
+  const { theme, toggleTheme } = useTheme(); 
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -40,11 +44,22 @@ const ProductDetails = () => {
   const fav = isFavorite(product.id);
 
   return (
+    
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="flex justify-center mt-6 mb-10"
     >
+       {/* ⭐ THEME TOGGLE BUTTON IN TOP RIGHT */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute top-4 right-4 rounded-lg"
+        onClick={toggleTheme}
+      >
+        {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+      </Button>
+      
       <Card className="w-full max-w-[70%] shadow-xl rounded-2xl border-border border">
         <CardContent className="p-8">
 
