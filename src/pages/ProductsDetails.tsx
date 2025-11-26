@@ -7,7 +7,11 @@ import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/contexts/FavoriteContext";
 import { useEffect, useState } from "react";
 import { Moon, Sun } from 'lucide-react';             
-
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 const fadeIn = {
   initial: { opacity: 0, y: 10 },
@@ -51,15 +55,27 @@ const ProductDetails = () => {
       className="flex justify-center mt-6 mb-10"
     >
        {/* ⭐ THEME TOGGLE BUTTON IN TOP RIGHT */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute top-4 right-4 rounded-lg"
-        onClick={toggleTheme}
-      >
-        {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-      </Button>
-      
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-4 right-4 rounded-lg"
+            onClick={toggleTheme}
+          >
+            {theme === 'light' ? (
+              <Moon className="h-5 w-5" />
+            ) : (
+              <Sun className="h-5 w-5" />
+            )}
+          </Button>
+        </TooltipTrigger>
+
+        <TooltipContent side="bottom">
+          <p>Change Theme</p>
+        </TooltipContent>
+      </Tooltip>
+
       <Card className="w-full max-w-[70%] shadow-xl rounded-2xl border-border border">
         <CardContent className="p-8">
 
@@ -75,22 +91,17 @@ const ProductDetails = () => {
 
           {/* Main Image */}
         <motion.div {...fadeIn} className="mt-5">
-  <h2 className="text-xl font-semibold mb-2">Product Image</h2>
+          <h2 className="text-xl font-semibold mb-2">Product Image</h2>
 
-  {/* Main Image with scroll */}
-  <div className="w-full h-72 bg-muted rounded-lg overflow-hidden shadow-inner border border-border relative">
-    <div className="w-full h-full overflow-y-auto">
-      <img
-        src={mainImage || product.thumbnail}
-        alt={product.title}
-        className="w-full object-contain"
-      />
-    </div>
-  </div>
+          {/* Main Image with scroll */}
+        <div className="w-full bg-muted rounded-lg shadow-inner border border-border p-4 flex justify-center">
+          <img
+            src={mainImage || product.thumbnail}
+            alt={product.title}
+            className="max-h-80 w-auto object-contain rounded-lg"
+          />
+        </div>
 
-  <p className="text-xs text-center text-muted-foreground mt-1">
-    Scroll inside the image to view full picture
-  </p>
 
   {/* Thumbnails */}
   {product.images?.length > 1 && (

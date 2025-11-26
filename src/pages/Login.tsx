@@ -10,6 +10,11 @@ import { toast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import { Moon, Sun } from 'lucide-react';             
 import PortalLogo from '../assets/vCommission-logo.png'
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -50,16 +55,29 @@ const Login = () => {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-brand-light via-background to-brand-cream p-4">
-      
+
       {/* ⭐ THEME TOGGLE BUTTON IN TOP RIGHT */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute top-4 right-4 rounded-lg"
-        onClick={toggleTheme}
-      >
-        {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-4 right-4 rounded-lg"
+            onClick={toggleTheme}
+          >
+            {theme === 'light' ? (
+              <Moon className="h-5 w-5" />
+            ) : (
+              <Sun className="h-5 w-5" />
+            )}
+          </Button>
+        </TooltipTrigger>
+
+        <TooltipContent side="bottom">
+          <p>Change Theme</p>
+        </TooltipContent>
+      </Tooltip>
+
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}

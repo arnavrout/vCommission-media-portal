@@ -6,15 +6,13 @@ import { useCart } from '@/contexts/CartContext';
 import { Badge } from '@/components/ui/badge';
 import { Heart } from 'lucide-react';
 import { useFavorites } from '@/contexts/FavoriteContext';
-
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "@/components/ui/tooltip";
+
 import { motion } from 'framer-motion';
 
 interface NavbarProps {
@@ -49,22 +47,27 @@ export const Navbar = ({ onToggleSidebar }: NavbarProps) => {
         </div>
 
         {/* Right section */}
+        <TooltipProvider delayDuration={200}>
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            className="rounded-lg"
-          >
-            {theme === 'light' ? (
-              <Moon className="h-5 w-5" />
-            ) : (
-              <Sun className="h-5 w-5" />
-            )}
-          </Button>
-          {/* For Favorites */}
-          <Sheet>
-            <SheetTrigger asChild>
+
+          {/* Theme Toggle */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                className="rounded-lg"
+              >
+                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Change Theme</TooltipContent>
+          </Tooltip>
+
+          {/* Favorites */}
+          <Tooltip>
+            <TooltipTrigger asChild>
               <Button variant="ghost" size="icon" className="relative rounded-lg">
                 <Heart className="h-5 w-5" />
                 {favoriteCount > 0 && (
@@ -76,39 +79,13 @@ export const Navbar = ({ onToggleSidebar }: NavbarProps) => {
                   </Badge>
                 )}
               </Button>
-            </SheetTrigger>
+            </TooltipTrigger>
+            <TooltipContent>Favorites</TooltipContent>
+          </Tooltip>
 
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Favorites</SheetTitle>
-                <SheetDescription>
-                  {favoriteCount === 0 ? 'No favorites added' : `${favoriteCount} items`}
-                </SheetDescription>
-              </SheetHeader>
-
-              <div className="mt-6 space-y-4">
-                {favorites.map(f => (
-                  <div key={f.id} className="flex items-center gap-4 border-b pb-4">
-                    <img
-                      src={f.image}
-                      className="h-16 w-16 object-cover rounded-lg"
-                    />
-                    <div className="flex-1">
-                      <h4 className="font-medium">{f.name}</h4>
-                    </div>
-                    <Button variant="ghost" size="sm" onClick={() => removeFavorite(f.id)}>
-                      Remove
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </SheetContent>
-          </Sheet>
-
-
-          {/* For Add To Cart */}
-          <Sheet>
-            <SheetTrigger asChild>
+          {/* Cart */}
+          <Tooltip>
+            <TooltipTrigger asChild>
               <Button variant="ghost" size="icon" className="relative rounded-lg">
                 <ShoppingCart className="h-5 w-5" />
                 {itemCount > 0 && (
@@ -120,58 +97,28 @@ export const Navbar = ({ onToggleSidebar }: NavbarProps) => {
                   </Badge>
                 )}
               </Button>
-            </SheetTrigger>
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Shopping Cart</SheetTitle>
-                <SheetDescription>
-                  {itemCount === 0 ? 'Your cart is empty' : `${itemCount} items in cart`}
-                </SheetDescription>
-              </SheetHeader>
-              <div className="mt-6 space-y-4">
-                {items.map((item) => (
-                  <div key={item.id} className="flex items-center gap-4 border-b pb-4">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="h-16 w-16 object-cover rounded-lg"
-                    />
-                    <div className="flex-1">
-                      <h4 className="font-medium">{item.name}</h4>
-                      <p className="text-sm text-muted-foreground">
-                        ₹{item.price.toLocaleString('en-IN')} × {item.quantity}
-                      </p>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeFromCart(item.id)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                ))}
-                {itemCount > 0 && (
-                  <div className="pt-4 border-t">
-                    <div className="flex items-center justify-between font-bold text-lg">
-                      <span>Total:</span>
-                      <span>₹{total.toLocaleString('en-IN')}</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </SheetContent>
-          </Sheet>
+            </TooltipTrigger>
+            <TooltipContent>Shopping Cart</TooltipContent>
+          </Tooltip>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={logout}
-            className="rounded-lg"
-          >
-            <LogOut className="h-5 w-5" />
-          </Button>
+          {/* Logout */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={logout}
+                className="rounded-lg"
+              >
+                <LogOut className="h-5 w-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Logout</TooltipContent>
+          </Tooltip>
+
         </div>
+      </TooltipProvider>
+
       </div>
     </motion.header>
   );
